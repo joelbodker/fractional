@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import confetti from "canvas-confetti";
 import { Problem, Fraction, EXPLANATIONS, STRATEGY_HINTS } from "../data/problems";
 import { useSession } from "../SessionContext";
 import { BarModel } from "./BarModel";
@@ -28,17 +27,6 @@ export function ProblemCard({ problem, onNext }: ProblemCardProps) {
     const isCorrect = side === largerSide;
     setStatus(isCorrect ? 'correct' : 'incorrect');
     recordAnswer(isCorrect);
-
-    if (isCorrect) {
-      // Fire celebratory confetti!
-      confetti({
-        particleCount: 150,
-        spread: 80,
-        origin: { y: 0.5 },
-        colors: ['#34d399', '#10b981', '#4F46E5', '#6366f1', '#fbbf24'],
-        zIndex: 100
-      });
-    }
   };
 
   const isCorrect = status === 'correct';
@@ -105,7 +93,7 @@ export function ProblemCard({ problem, onNext }: ProblemCardProps) {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                  className="text-red-700 font-semibold bg-white px-6 py-3 rounded-[8px] shadow-[0_8px_30px_rgba(220,38,38,0.15)] border border-red-100 text-lg"
+                  className="text-slate-600 font-semibold bg-white px-6 py-3 rounded-[8px] shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-slate-200 text-lg"
                 >
                   Let&apos;s look at this together.
                 </motion.div>
@@ -209,9 +197,9 @@ function FractionButton({ fraction, isSelected, status, disabled, correctSide, o
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     
-    // Calculate tilt angles (max 15 degrees)
-    const rx = ((y - centerY) / centerY) * -15; 
-    const ry = ((x - centerX) / centerX) * 15;
+    // Subtle tilt (max 4 degrees) for a classy hover
+    const rx = ((y - centerY) / centerY) * -4; 
+    const ry = ((x - centerX) / centerX) * 4;
     
     setRotateX(rx);
     setRotateY(ry);
@@ -228,7 +216,7 @@ function FractionButton({ fraction, isSelected, status, disabled, correctSide, o
 
   if (!disabled) {
     // High contrast styling for untouched state
-    containerClasses += "bg-white border-transparent shadow-[0_16px_40px_rgba(0,0,0,0.08)] cursor-pointer hover:shadow-[0_24px_60px_rgba(99,102,241,0.15)] ";
+    containerClasses += "bg-white border-slate-200/80 shadow-[0_4px_12px_rgba(0,0,0,0.06)] cursor-pointer hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:border-slate-300/90 transition-shadow transition-colors duration-200 ";
     textClasses += "text-slate-800 ";
     lineClasses += "border-slate-300 ";
   } else {
@@ -237,9 +225,9 @@ function FractionButton({ fraction, isSelected, status, disabled, correctSide, o
       textClasses += "text-white ";
       lineClasses += "border-emerald-200/50 ";
     } else if (isSelected && status === 'incorrect') {
-      containerClasses += "bg-red-50 border-red-300 shadow-[0_0_0_2px_rgba(239,68,68,0.2)] ";
-      textClasses += "text-red-600 ";
-      lineClasses += "border-red-200 ";
+      containerClasses += "bg-slate-100 border-slate-200 opacity-80 ";
+      textClasses += "text-slate-500 ";
+      lineClasses += "border-slate-300 ";
     } else if (!isSelected && correctSide && status === 'incorrect') {
       containerClasses += "bg-white border-indigo-200 ring-4 ring-indigo-50 shadow-[0_16px_40px_rgba(99,102,241,0.15)] ";
       textClasses += "text-slate-800 ";
@@ -264,7 +252,7 @@ function FractionButton({ fraction, isSelected, status, disabled, correctSide, o
         rotateY: rotateY,
         scale: scaleTarget,
       }}
-      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
       disabled={disabled}
       onClick={onClick}
       className={containerClasses}

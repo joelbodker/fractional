@@ -1,10 +1,8 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useSession } from "./SessionContext";
 import { useApp } from "./AppContext";
 import { RotateCcw } from "lucide-react";
 import { motion } from "motion/react";
-import confetti from "canvas-confetti";
 import einsteinSvg from "@/assets/Einstein.svg";
 import logoRevSvg from "@/assets/LearnWithAI-LogoRev.svg";
 
@@ -12,26 +10,6 @@ export function Summary() {
   const { totalAnswered, correctAnswers, startSession } = useSession();
   const { setShowLogoReveal } = useApp();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const colors = ["#34d399", "#10b981", "#4F46E5", "#6366f1", "#fbbf24"];
-    confetti({
-      particleCount: 240,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0, y: 0.5 },
-      colors,
-      zIndex: 0,
-    });
-    confetti({
-      particleCount: 240,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1, y: 0.5 },
-      colors,
-      zIndex: 0,
-    });
-  }, []);
 
   const handleRestart = () => {
     startSession();
